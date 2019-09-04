@@ -1,0 +1,11 @@
+---
+# General 389-ds details for inf template
+password: admin123
+suffix: dc=redhatqe,dc=com
+rootdn: cn=Directory Manager
+serverid: ldapsrv
+
+# Admin server and FQDN details
+admin_password: admin123
+admin_domain: redhatqe.com
+ldap_server_fqdn: ldap.redhatqe.com

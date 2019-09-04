@@ -1,0 +1,41 @@
+---
+- name: Setup epel repository
+  yum: name=epel-release state=present
+  when: ansible_os_family == "RedHat" or ansible_os_family == "Centos"
+  
+- name: Configure group
+  group: name=ldap gid=389
+
+- name: Create ldapadmin user and set its password
+  user: name=ldapadmin password={{admin_password}} uid=389 group=ldap
+
+- name: Install 389 directory server packages
+  yum: name={{item}} state=present
+  with_items:
+    - 389-ds
+    - 389-ds-base
+    - openldap-clients
+    - 389-admin
+    - 389-console
+
+- name: Configure sysctl variables required for 389-ds
+  sysctl: name={{item.name}}  value={{item.value}} sysctl_set=yes state=present
+  with_items:
+    - {name: net.ipv4.tcp_keepalive_time, value: 300}
+    - {name: net.ipv4.ip_local_port_range, value: "1024 65000"}
+    - {name: fs.file-max, value: 64000}
+
+- name: Configure file descriptors for directory service (systemd service dirsrv)
+  lineinfile:
+    dest=/etc/sysconfig/dirsrv.systemd
+    state=present
+    insertafter="^[Service]"
+    line=LimitNOFILE=8192    
+
+- name: Copy inf template for setting up ldap server
+  template: src=templates/ldap.inf.j2 dest=/root/ldap.inf
+
+- name: Run final ldap setup script setup-ds-admin.pl
+  shell: /usr/sbin/setup-ds-admin.pl --silent --file=/root/ldap.inf
+  notify:
+    - Enable and start Directory Server

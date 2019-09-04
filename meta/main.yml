@@ -1,0 +1,11 @@
+galaxy_info:
+  author: "Sumit Girish Shatwara"
+  company: "Capgemini"
+  min_ansible_version: 1.4
+  platforms:
+   - name: CentOS/RHEL
+     versions:
+      - 7
+  categories:
+   - ldap
+dependencies: []

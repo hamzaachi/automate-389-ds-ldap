@@ -1,0 +1,28 @@
+# Add server details
+server:
+    server_uri: 'hpe.dockers.com'
+    search_base: 'dc=dockers,dc=com'
+
+# Add connection details
+connection:
+    admin_user: 'cn=Directory Manager'
+    password: 'hpe_2017'
+
+# Add user details
+user:
+    user_base: 'cn=sumit2,ou=People,dc=dockers,dc=com'
+    attributes:
+        objectClass:
+            - top
+            - organizationalPerson
+            - person
+        sn: 'user_sn'        
+            
+# Add group details
+group:
+    group_base: 'cn=group2,ou=Groups,dc=dockers,dc=com'
+    attributes:
+        objectClass:
+            - top
+            - groupOfUniqueNames
+            
